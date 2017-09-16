@@ -6,10 +6,6 @@ import (
 	"os/exec"
 )
 
-func main() {
-	CreateApp("web", "uahakron", "fall-2017-website")
-}
-
 func CreateApp(appType string, user string, repo string) {
 	var (
 		err	error
