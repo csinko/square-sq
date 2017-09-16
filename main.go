@@ -28,6 +28,22 @@ func parsePost(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(string(body))
 
 		//Parse body JSON into object
+		
+			// Unmarshal
+			var msg Message
+			err = json.Unmarshal(body, &msg)
+			if err != nil {
+				http.Error(w, err.Error(), 500)
+				return
+			}
+
+			output, err := json.Marshal(msg)
+			if err != nil {
+				http.Error(w, err.Error(), 500)
+				return
+			}
+			w.Header().Set("content-type", "application/json")
+			w.Write(output)
 
 		//Send success as a response
 		fmt.Fprint(w, "Success")
@@ -47,31 +63,6 @@ func main() {
 	//create mux to identify post type
 	mux := http.NewServeMux()
 	mux.HandleFunc("/push", parsePost)
-
-	/*s := "postgres://user:pass@host.com:5432/path?k=v#f"
-
-	  u, err := url.Parse(s)
-	  if err != nil {
-	      panic(err)
-	  }
-	  fmt.Println(u.Scheme)
-
-	  fmt.Println(u.User)
-	  fmt.Println(u.User.Username())
-	  p, _ := u.User.Password()
-	  fmt.Println(p)
-
-	  fmt.Println(u.Host)
-	  host, port, _ := net.SplitHostPort(u.Host)
-	  fmt.Println(host)
-	  fmt.Println(port)
-	  fmt.Println(u.Path)
-	  fmt.Println(u.Fragment)
-	  fmt.Println(u.RawQuery)
-	  m, _ := url.ParseQuery(u.RawQuery)
-	  fmt.Println(m)
-	  fmt.Println(m["k"][0])
-	*/
 
 	log.Println("Listening...")
 	http.ListenAndServe(":8080", mux)
