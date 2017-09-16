@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-func main() {
+func UpdateConfig(appType string, user string, repo string) {
 	//Open nginx config
 	conf, err := ioutil.ReadFile("/etc/nginx/sites-available/default")
 	if (err != nil) {
@@ -32,22 +32,25 @@ func main() {
 	var newConf []string
 
 	newConf = append(newConf, "")
-	newConf = append(newConf, "\t# START <user>/<repo>")
+	newConf = append(newConf, "\t# START " + user + "/" + repo)
 
-	locString := "\tlocation /repo/user/repo"
+	locString := "\tlocation /repo/" + user + "/" + repo
 
 	//TODO add compat to check if web app or not (assuming true for now)
-	isWeb := true
-	if (isWeb) {locString += "/"}
+	var isWeb bool
+	if (appType == "web") {
+		isWeb = true
+	}
+	if (!isWeb) {locString += "/"}
 
 	locString += " {"
 
 	newConf = append(newConf, locString)
 
-	if (isWeb) {newConf = append(newConf, "\t\talias /var/app/deploy/user/repo;")}
+	if (isWeb) {newConf = append(newConf, "\t\talias /var/app/deploy/" + user + "/" + repo + ";")}
 
 	newConf = append(newConf, "\t}")
-	newConf = append(newConf, "\t# END <user>/<repo>")
+	newConf = append(newConf, "\t# END " + user + "/" + repo)
 
 	confLines = append(confLines[:lastBracket], append(newConf, confLines[lastBracket:]...)...)
 
