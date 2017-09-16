@@ -42,8 +42,8 @@ func parsePost(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), 500)
 				return
 			}
-			w.Header().Set("content-type", "application/json")
-			w.Write(output)
+			
+			fmt.Println(msg.Repository.repoName)
 
 		//Send success as a response
 		fmt.Fprint(w, "Success")
