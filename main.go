@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"encoding/json"
+	"encoding/json"
 	//"flag"
 	"fmt"
 	"io/ioutil"
@@ -30,7 +30,7 @@ func parsePost(w http.ResponseWriter, r *http.Request) {
 		//Parse body JSON into object
 		
 			// Unmarshal
-			var msg Message
+			var msg Webhook
 			err = json.Unmarshal(body, &msg)
 			if err != nil {
 				http.Error(w, err.Error(), 500)
