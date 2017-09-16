@@ -7,9 +7,8 @@ import (
 )
 
 func CreateApp(appType string, user string, repo string) {
-	var (
-		err	error
-	)
+	var err error
+
 	rootAppFolder := "/var/app/deploy/"+user+"/"+repo
 	os.MkdirAll(rootAppFolder, os.ModePerm)
 	cmdName := "git"
@@ -29,4 +28,11 @@ func CreateApp(appType string, user string, repo string) {
 		fmt.Fprintln(os.Stderr, "Nginx Restart Error: ", err)
 		os.Exit(1)
 	}
+}
+
+
+func UpdateApp(appType string, user string, repo string) {
+	rootAppFolder := "/var/app/deploy/"+user+"/"+repo
+	
+
 }
