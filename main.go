@@ -37,11 +37,6 @@ func parsePost(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			output, err := json.Marshal(msg)
-			if err != nil {
-				http.Error(w, err.Error(), 500)
-				return
-			}
 			
 			fmt.Println(msg.Repository.repoName)
 
