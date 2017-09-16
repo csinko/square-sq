@@ -9,7 +9,7 @@ import ("fmt"
 func main() {
 	fmt.Printf("hello, world\n")
 
-	 http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	 http.HandleFunc("/Dashboard/", func(w http.ResponseWriter, r *http.Request) {
         fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
     })
 
