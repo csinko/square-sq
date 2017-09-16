@@ -14,34 +14,26 @@ import (
 //function to collect post requests
 func parsePost(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println(r.Method)
-
+	//Check if request is a POST request
 	if r.Method == "POST" {
 
-		//fmt.Printf("Req: %s %s\n", r.Host, r.URL.Path)
-		//url := html.EscapeString(r.URL.Path)
-		//fmt.Println(url)
-		//spliturl := strings.Split(url, "/")
-		//for _, str := range spliturl {
-		//	fmt.Println(str)
-		//}
-
-		//before := s[0]
-		//after := s[1]
-		//fmt.Println(before,after)
-
+		//Read the body of the request.  If thers an error, return an error.
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-
 			http.Error(w, "Error reading request body", http.StatusInternalServerError)
+			return
 		}
 
+		//Print out body for debug
 		fmt.Println(string(body))
 
+		//Parse body JSON into object
+
+		//Send success as a response
 		fmt.Fprint(w, "Success")
 
 	} else {
-
+		//Return an error if not POST
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }
