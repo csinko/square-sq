@@ -44,26 +44,26 @@ func getRepos(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func deleteRepos(s *mgo.Session) func(w http.ResponseWriter, r *http.Request){
+func deleteRepos(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 
-	return func(w http.ResponseWriter, r *http.Request){
+	return func(w http.ResponseWriter, r *http.Request) {
 
-		session:= s.Copy()
+		session := s.Copy()
 		defer session.Close()
 
-		c:=session.DB("hackthenorth17").C("repos")
+		c := session.DB("hackthenorth17").C("repos")
 
-		err:= c.Remove(bson.M{})
+		err := c.Remove(bson.M{})
 
 		if err != nil {
 			switch err {
 			default:
-				http.Error(w,"Database Error",http.StatusInternalServerError)
+				http.Error(w, "Database Error", http.StatusInternalServerError)
 
 				fmt.Println("Failed to delete repo")
 				return
 			case mgo.ErrNotFound:
-				http.Error(w,"Record Not Found", http.StatusNotFound)
+				http.Error(w, "Record Not Found", http.StatusNotFound)
 				return
 
 			}
@@ -106,7 +106,7 @@ func parsePost(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 			}
 
 			var curRepo Webhook
-			err = c.Find(bson.M{"Repository.ID": msg.Repository.ID}).One(&curRepo)
+			err = c.Find(bson.M{"repository.id": msg.Repository.ID}).One(&curRepo)
 
 			//If the repo was not found (its new)
 			if err != nil {
@@ -120,7 +120,7 @@ func parsePost(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 
 			curRepo.Commits = append(curRepo.Commits, msg.Commits...)
 
-			err = c.Update(bson.M{"Repository.ID": curRepo.Repository.ID}, &curRepo)
+			err = c.Update(bson.M{"repository.id": curRepo.Repository.ID}, &curRepo)
 			if err != nil {
 				fmt.Println("Failed to Update")
 				fmt.Fprint(w, "FAIL")
@@ -163,7 +163,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/push", parsePost(session))
 	mux.HandleFunc("/api/repos", getRepos(session))
-	mux.HandleFunc("/api/repos/delete",deleteRepos(session))
+	mux.HandleFunc("/api/repos/delete", deleteRepos(session))
 
 	log.Println("Listening...")
 	http.ListenAndServe(":8080", mux)
