@@ -27,7 +27,7 @@ type Webhook struct{
 	Repository struct{
 
 		repoName  string `json:"name"`
-		repoID int64 `json:"id"`
+		ID int64 `json:"id"`
 
 		Owner struct {
 
