@@ -14,15 +14,15 @@ type Webhook struct{
 		commitTimestamp time.Time `json:"timestamp"`
 
 		Author struct {
-			
+
 			authorEmail    string `json:"email"`
 			authorName     string `json:"name"`
 			authorUsername string `json:"username"`
-		
+
 		} `json:"author"`
 
 
-	} `json:"committer"`
+	} `json:"commits"`
 
 	Repository struct{
 

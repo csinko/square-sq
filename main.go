@@ -28,7 +28,7 @@ func parsePost(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(string(body))
 
 		//Parse body JSON into object
-		
+
 			// Unmarshal
 			var msg Webhook
 			err = json.Unmarshal(body, &msg)
@@ -37,8 +37,10 @@ func parsePost(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			
-			fmt.Println(msg.Repository.repoName)
+			jsonOut, _ := json.Marshal(msg)
+			fmt.Println(string(jsonOut))
+
+			fmt.Println("Done")
 
 		//Send success as a response
 		fmt.Fprint(w, "Success")
