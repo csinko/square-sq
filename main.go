@@ -163,6 +163,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/push", parsePost(session))
 	mux.HandleFunc("/api/repos", getRepos(session))
+	mux.HandleFunc("/api/repos/delete",deleteRepos(session))
 
 	log.Println("Listening...")
 	http.ListenAndServe(":8080", mux)
