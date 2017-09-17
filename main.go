@@ -11,6 +11,7 @@ import (
 	//"strings"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"github.com/gorilla/mux"
 )
 
 func getRepos(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
@@ -155,16 +156,14 @@ func main() {
 	defer session.Close()
 	fmt.Printf("Connected to %v!\n", session.LiveServers())
 
-	//accept front end files
-	fs := http.FileServer(http.Dir("dashboard"))
-	http.Handle("/dashboard/", http.StripPrefix("/dashboard", fs))
-
-	//create mux to identify post type
-	mux := http.NewServeMux()
+	mux := mux.NewRouter()
 	mux.HandleFunc("/push", parsePost(session))
 	mux.HandleFunc("/api/repos", getRepos(session))
 	mux.HandleFunc("/api/repos/delete", deleteRepos(session))
+	fs := http.StripPrefix("/dashboard/", http.FileServer(http.Dir("./dashboard/")))
+	mux.PathPrefix("/dashboard/").Handler(fs)
+	http.Handle("/", mux)
 
 	log.Println("Listening...")
-	http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(":8080", nil)
 }
