@@ -5,7 +5,8 @@ import (
 )
 
 type Webhook struct {
-	Commits []struct {
+	RepoType string `json:"repotype"`
+	Commits  []struct {
 		ID     string `json:"id"`
 		Author struct {
 			Email    string `json:"email"`
@@ -23,4 +24,12 @@ type Webhook struct {
 			Name string `json:"name"`
 		} `json:"owner"`
 	} `json:"repository"`
+}
+
+type GitTree struct {
+	Sha  string `json:"sha"`
+	URL  string `json:"url"`
+	Tree []struct {
+		Path string `json:"path"`
+	} `json:"tree"`
 }

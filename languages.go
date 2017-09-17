@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 // IsNodeApplication checks if the app is a node app
@@ -27,13 +28,16 @@ func IsNodeApplication(msg Webhook) bool {
 		log.Fatal(err)
 	}
 
-	var objmap map[string]*json.RawMessage
+	var respTree GitTree
 
-	if err := json.Unmarshal([]byte(respBody), &objmap); err != nil {
+	if err := json.Unmarshal([]byte(respBody), &respTree); err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(objmap["tree"])
-
+	for _, file := range respTree.Tree {
+		if strings.Contains(file.Path, "package.json") {
+			return true
+		}
+	}
 	return false
 }

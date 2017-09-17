@@ -6,8 +6,12 @@ import (
 	"os/exec"
 )
 
-func CreateApp(appType string, user string, repo string) {
+//func CreateApp(appType string, user string, repo string) {
+func CreateApp(msg Webhook) {
 	var err error
+	user := msg.Repository.Owner.Name
+	repo := msg.Repository.Name
+	appType := msg.RepoType
 
 	rootAppFolder := "/var/app/deploy/" + user + "/" + repo
 	os.MkdirAll(rootAppFolder, os.ModePerm)
@@ -30,7 +34,12 @@ func CreateApp(appType string, user string, repo string) {
 	}
 }
 
-func UpdateApp(appType string, user string, repo string) {
+//func UpdateApp(appType string, user string, repo string) {
+func UpdateApp(msg Webhook) {
+	user := msg.Repository.Owner.Name
+	repo := msg.Repository.Name
+	//appType := msg.RepoType
+
 	rootAppFolder := "/var/app/deploy/" + user + "/" + repo
 	cmd := exec.Command("/bin/sh", "-c", "cd "+rootAppFolder+" && /usr/bin/git reset --hard HEAD && /usr/bin/git clean -fdx && /usr/bin/git pull")
 	err := cmd.Run()

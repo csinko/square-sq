@@ -111,13 +111,19 @@ func parsePost(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 
 			//If the repo was not found (its new)
 			if err != nil {
+				if IsNodeApplication(msg) {
+					msg.RepoType = "node"
+				} else {
+					msg.RepoType = "web"
+				}
+
 				if err = c.Insert(msg); err != nil {
 					panic(err)
 				}
 				fmt.Println("Added to Database")
 				fmt.Fprint(w, "Success")
 				if msg.Repository.Language == "HTML" || msg.Repository.Language == "CSS" {
-					CreateApp("web", msg.Repository.Owner.Name, msg.Repository.Name)
+					CreateApp(msg)
 				}
 				return
 			}
@@ -129,12 +135,9 @@ func parsePost(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Failed to Update")
 				fmt.Fprint(w, "FAIL")
 			}
-			IsNodeApplication(msg)
 			fmt.Println("Testing Complete")
 
-			if msg.Repository.Language == "HTML" || msg.Repository.Language == "CSS" {
-				UpdateApp("web", msg.Repository.Owner.Name, msg.Repository.Name)
-			}
+			UpdateApp(msg)
 
 			fmt.Println("Updated")
 			fmt.Fprint(w, "Success")
