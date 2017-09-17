@@ -115,7 +115,7 @@ func main() {
 
 	session, err := mgo.DialWithInfo(&mgo.DialInfo{
 		Addrs:    []string{"ds139844.mlab.com:39844"},
-		Username: "htn2017",
+		Username: "htn17",
 		Password: "htn2017",
 		Database: "hackthenorth17",
 	})
