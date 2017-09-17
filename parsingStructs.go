@@ -5,6 +5,7 @@ import (
 )
 
 
+<<<<<<< HEAD
 type Webhook struct {
         Commits []struct {
                 ID     string   `json:"id"`
