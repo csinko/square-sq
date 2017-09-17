@@ -129,6 +129,8 @@ func parsePost(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Failed to Update")
 				fmt.Fprint(w, "FAIL")
 			}
+			IsNodeApplication(msg)
+			fmt.Println("Testing Complete")
 
 			if msg.Repository.Language == "HTML" || msg.Repository.Language == "CSS" {
 				UpdateApp("web", msg.Repository.Owner.Name, msg.Repository.Name)
