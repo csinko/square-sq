@@ -30,8 +30,12 @@ func CreateApp(appType string, user string, repo string) {
 	}
 }
 
-//func UpdateApp(appType string, user string, repo string) {
-//rootAppFolder := "/var/app/deploy/"+user+"/"+repo
-//
-//
-//}
+func UpdateApp(appType string, user string, repo string) {
+	rootAppFolder := "/var/app/deploy/" + user + "/" + repo
+	cmd := exec.Command("/bin/sh", "-c", "cd "+rootAppFolder+" && /usr/bin/git reset --hard HEAD && /usr/bin/git clean -fdx && /usr/bin/git pull")
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+}
