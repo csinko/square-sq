@@ -1,15 +1,15 @@
 package main
 
 import (
-	"os"
 	"fmt"
+	"os"
 	"os/exec"
 )
 
 func CreateApp(appType string, user string, repo string) {
 	var err error
 
-	rootAppFolder := "/var/app/deploy/"+user+"/"+repo
+	rootAppFolder := "/var/app/deploy/" + user + "/" + repo
 	os.MkdirAll(rootAppFolder, os.ModePerm)
 	cmdName := "git"
 	cmdArgs := []string{"clone", "https://github.com/" + user + "/" + repo, rootAppFolder}
@@ -30,9 +30,8 @@ func CreateApp(appType string, user string, repo string) {
 	}
 }
 
-
-func UpdateApp(appType string, user string, repo string) {
-	rootAppFolder := "/var/app/deploy/"+user+"/"+repo
-	
-
-}
+//func UpdateApp(appType string, user string, repo string) {
+//rootAppFolder := "/var/app/deploy/"+user+"/"+repo
+//
+//
+//}
