@@ -44,6 +44,35 @@ func getRepos(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func deleteRepos(s *mgo.Session) func(w http.ResponseWriter, r *http.Request){
+
+	return func(w http.ResponseWriter, r *http.Request){
+
+		session:= s.Copy()
+		defer session.Close()
+
+		c:=session.DB("hackthenorth17").C("repos")
+
+		err:= c.Remove(bson.M{})
+
+		if err != nil {
+			switch err {
+			default:
+				http.Error(w,"Database Error",http.StatusInternalServerError)
+
+				fmt.Println("Failed to delete repo")
+				return
+			case mgo.ErrNotFound:
+				http.Error(w,"Record Not Found", http.StatusNotFound)
+				return
+
+			}
+		}
+
+		w.WriteHeader(http.StatusNoContent)
+	}
+}
+
 //function to collect post requests
 func parsePost(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
