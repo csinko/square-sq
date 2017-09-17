@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"encoding/json"
 	//"flag"
@@ -10,9 +9,9 @@ import (
 	"net/http"
 	//"time"
 	//"strings"
+	"github.com/gorilla/mux"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"github.com/gorilla/mux"
 )
 
 func getRepos(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
@@ -117,6 +116,9 @@ func parsePost(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 				}
 				fmt.Println("Added to Database")
 				fmt.Fprint(w, "Success")
+				if msg.Repository.Language == "HTML" || msg.Repository.Language == "CSS" {
+					CreateApp("web", msg.Repository.Owner.Name, msg.Repository.Name)
+				}
 				return
 			}
 
@@ -128,10 +130,12 @@ func parsePost(s *mgo.Session) func(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprint(w, "FAIL")
 			}
 
-			jsonOut, _ := json.Marshal(msg)
-			fmt.Println(string(jsonOut))
+			if msg.Repository.Language == "HTML" || msg.Repository.Language == "CSS" {
+				UpdateApp("web", msg.Repository.Owner.Name, msg.Repository.Name)
+			}
 
-			fmt.Println("Done")
+			fmt.Println("Updated")
+			fmt.Fprint(w, "Success")
 
 			//Send success as a response
 
